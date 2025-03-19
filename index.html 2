@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Edit your HTML, CSS, and JavaScript code and see your changes instantly with live preview. A handy tool for web developers, designers, and learners.">
+  <title>HTML Editor: Online HTML Editor with Real-Time Preview</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    html, body {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background-color: #f7f9fc;
+    }
+
+    header, footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      color: #fff;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    }
+
+    footer {
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+    }
+
+    main {
+      display: flex;
+      flex: 1;
+      padding: 10px;
+      gap: 10px;
+    }
+
+    main.vertical {
+      flex-direction: column;
+    }
+
+    header *,
+    footer * {
+      font: 0.875rem Arial, sans-serif;
+    }
+
+    select, button, input {
+      margin: 0;
+    }
+
+    label[for="editorSizeInput"], address {
+      margin-left: auto;
+    }
+
+    #editorSizeInput, iframe {
+      padding: 0;
+    }
+
+    output {
+      font-family: monospace;
+    }
+
+    .toggle {
+      padding: 4px 8px;
+      border: 1px solid #fff;
+      border-radius: 12px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #footerContainerToggle {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border-bottom-width: 5px;
+      border-radius: 0;
+    }
+
+    .active {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #copyButton {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+    }
+
+    div {
+      position: relative;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #previewerWrapper {
+      border-left: 5px solid #ccc;
+    }
+
+    main.vertical #previewerWrapper {
+      border-left: 0;
+      border-top: 5px solid #ccc;
+    }
+
+    div * {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      margin: 0;
+      background: #fff;
+    }
+
+    textarea {
+      box-sizing: border-box;
+      padding: 10px;
+      outline: 0;
+      resize: none;
+      color: #333;
+      background-color: #f7f9fc;
+    }
+
+    textarea.dark {
+      background: #333;
+      color: #fff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Header Title Styles */
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      margin-right: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-title">DigitSync</div>
+    <a href="" download="template.html" id="downloadLink" title="Download HTML document">Download</a>
+    <label for="fontSizeSelector">Font size</label>
+    <select id="fontSizeSelector">
+      <option>12</option>
+      <option>13</option>
+      <option selected="">14</option>
+      <option>15</option>
+      <option>16</option>
+      <option>17</option>
+      <option>18</option>
+      <option>19</option>
+      <option>20</option>
+    </select>
+    <label for="previewSelector">Preview</label>
+    <select id="previewSelector">
+      <option>Instant</option>
+      <optgroup label="Delayed">
+        <option value="500" selected="">0.5 s</option>
+        <option value="1000">1 s</option>
+        <option value="1500">1.5 s</option>
+        <option value="2000">2 s</option>
+      </optgroup>
+      <option>Manual</option>
+    </select>
+    <button type="button" id="runButton" class="hidden">Run</button>
+    <button type="button" id="resetButton">Reset</button>
+    <button type="button" id="selectButton">Select</button>
+    <input type="file" accept="text/html" id="fileInput">
+    <label for="editorSizeInput">Editor size</label>
+    <input type="range" id="editorSizeInput">
+    <output for="editorSizeInput">0.50</output>
+    <button type="button" class="toggle" id="verticalViewToggle">Vertical view</button>
+    <button type="button" class="toggle" id="darkEditorToggle">Dark editor</button>
+    <button type="button" class="toggle" id="spellcheckToggle">Spellcheck</button>
+    <button type="button" class="toggle" id="footerContainerToggle" title="Toggle footer"></button>
+  </header>
+  <main>
+    <div id="editorWrapper" style="flex-grow: 50%;">
+      <textarea spellcheck="false" style="font-size: 14px;">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;HTML Document Template&lt;/title&gt;
+  &lt;style&gt;
+    p {
+      font-family: Arial;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;Hello, world!&lt;/p&gt;
+  &lt;script&gt;
+    console.log(document.querySelector('p').textContent);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+    </div>
+    <div id="previewerWrapper" style="flex-grow: 50%;">
+      <iframe></iframe>
+    </div>
+  </main>
+  <footer class="hidden">
+    <span>Share</span>
+    <a href="" target="_blank"><img src="images/email.svg" width="16" height="16" alt="Email"></a>
+    <button type="button" id="copyButton"><img src="images/link.svg" width="16" height="16" alt="Link"></button>
+    <span id="copyNotification" class="hidden">Copied!</span>
+    <address><a href="thedigitsync.blogspot.com" title="Code Review Stack Exchange">Feedback</a> | Created by <a href="thedigitsync.blogspot.com" rel="author">Rouf</a></address>
+  </footer>
+  <script>
+    const previewer = document.querySelector('iframe'),
+      editor = document.querySelector('textarea'),
+      previewSelector = document.getElementById('previewSelector'),
+      downloadLink = document.getElementById('downloadLink'),
+      fontSizeSelector = document.getElementById('fontSizeSelector'),
+      runButton = document.getElementById('runButton'),
+      fileInput = document.getElementById('fileInput'),
+      editorSizeInput = document.getElementById('editorSizeInput'),
+      editorWrapper = document.getElementById('editorWrapper'),
+      previewerWrapper = document.getElementById('previewerWrapper'),
+      editorSizeOutput = document.querySelector('output'),
+      verticalViewToggle = document.getElementById('verticalViewToggle'),
+      mainContainer = document.querySelector('main'),
+      darkEditorToggle = document.getElementById('darkEditorToggle'),
+      spellcheckToggle = document.getElementById('spellcheckToggle'),
+      footerContainerToggle = document.getElementById('footerContainerToggle'),
+      footerContainer = document.querySelector('footer'),
+      copyNotification = document.getElementById('copyNotification');
+    let previewTimeout = null;
+
+    function toggleClass(element, className, force) {
+      element.classList.toggle(className, force);
+    }
+
+    function preview() {
+      previewer.replaceWith(previewer); // a fresh iframe to delete JavaScript variables
+      const previewerDocument = previewer.contentDocument;
+      previewerDocument.write(editor.value);
+      previewerDocument.close();
+    }
+
+    function timedPreview() {
+      const previewSelectorValue = previewSelector.value;
+      if (previewSelectorValue === 'Instant') {
+        preview();
+      } else if (previewSelectorValue !== 'Manual') {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(preview, previewSelectorValue);
+      }
+    }
+
+    function createDownloadURL() {
+      const blob = new Blob([editor.value], {type: 'text/html; charset=utf-8'});
+      downloadLink.href = URL.createObjectURL(blob);
+    }
+
+    function resizeFont() {
+      editor.style.fontSize = fontSizeSelector.value + 'px';
+    }
+
+    function toggleRunButton() {
+      toggleClass(runButton, 'hidden', previewSelector.value !== 'Manual');
+    }
+
+    function resizeEditor() {
+      const editorSizeInputValue = editorSizeInput.value;
+      editorWrapper.style.flexGrow = editorSizeInputValue;
+      previewerWrapper.style.flexGrow = 100 - editorSizeInputValue;
+      editorSizeOutput.value = (editorSizeInputValue / 100).toFixed(2);
+    }
+
+    runButton.addEventListener('click', preview);
+
+    editor.addEventListener('input', timedPreview);
+
+    downloadLink.addEventListener('click', createDownloadURL);
+    downloadLink.addEventListener('contextmenu', createDownloadURL);
+
+    fontSizeSelector.addEventListener('change', resizeFont);
+
+    previewSelector.addEventListener('change', toggleRunButton);
+
+    editorSizeInput.addEventListener('input', resizeEditor);
+
+    document.getElementById('resetButton').addEventListener('click', function() {
+      if (!editor.value || editor.value !== editor.defaultValue && confirm('Your input will be lost.\nAre you sure you want to reset?')) {
+        fileInput.value = '';
+        downloadLink.download = 'template.html';
+        editor.value = editor.defaultValue;
+        timedPreview();
+      }
+    });
+
+    document.getElementById('selectButton').addEventListener('click', function() {
+      editor.select();
+    });
+
+    fileInput.addEventListener('change', async function() {
+      const file = this.files[0];
+      if (file) { // to ensure that there's a file to read so Chrome, for example, doesn't run this function when you cancel choosing a new file
+        downloadLink.download = file.name;
+        editor.value = await file.text();
+        timedPreview();
+      }
+    });
+
+    verticalViewToggle.addEventListener('click', function() {
+      toggleClass(mainContainer, 'vertical');
+      toggleClass(this, 'active');
+    });
+
+    darkEditorToggle.addEventListener('click', function() {
+      toggleClass(editor, 'dark');
+      toggleClass(this, 'active');
+    });
+
+    spellcheckToggle.addEventListener('click', function() {
+      editor.spellcheck = !editor.spellcheck;
+      toggleClass(this, 'active');
+    });
+
+    footerContainerToggle.addEventListener('click', function() {
+      toggleClass(footerContainer, 'hidden');
+      toggleClass(this, 'active');
+    });
+
+    document.getElementById('copyButton').addEventListener('click', function() {
+      navigator.clipboard.writeText(location);
+      toggleClass(copyNotification, 'hidden');
+      setTimeout(toggleClass, 2000, copyNotification, 'hidden');
+    });
+
+    // Save the current state to localStorage.
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        const currentState = {
+          spellcheckToggle: spellcheckToggle.className,
+          verticalViewToggle: verticalViewToggle.className,
+          darkEditorToggle: darkEditorToggle.className,
+          footerContainerToggle: footerContainerToggle.className,
+          previewSelector: previewSelector.value,
+          fontSizeSelector: fontSizeSelector.value,
+          editorSizeInput: editorSizeInput.value,
+          editor: editor.value,
+        };
+        localStorage.setItem('state', JSON.stringify(currentState));
+      }
+    });
+
+    // Restore the state from localStorage.
+    const restoredState = JSON.parse(localStorage.getItem('state'));
+    if (restoredState) {
+      spellcheckToggle.className = restoredState.spellcheckToggle;
+      verticalViewToggle.className = restoredState.verticalViewToggle;
+      darkEditorToggle.className = restoredState.darkEditorToggle;
+      footerContainerToggle.className = restoredState.footerContainerToggle;
+      previewSelector.value = restoredState.previewSelector;
+      fontSizeSelector.value = restoredState.fontSizeSelector;
+      editorSizeInput.value = restoredState.editorSizeInput;
+      editor.value = restoredState.editor;
+    }
+
+    // Update the UI based on the restored state.
+    editor.spellcheck = spellcheckToggle.classList.contains('active');
+    toggleClass(mainContainer, 'vertical', verticalViewToggle.classList.contains('active'));
+    toggleClass(editor, 'dark', darkEditorToggle.classList.contains('active'));
+    toggleClass(footerContainer, 'hidden', !footerContainerToggle.classList.contains('active'));
+    toggleRunButton();
+    resizeFont();
+    resizeEditor();
+    timedPreview();
+  </script>
+</body>
+</html>
